@@ -2,157 +2,88 @@
 
 # 支持这些语句：
 
-CREATE DATABASE markbook;
-[OK]
 
-USE markbook;
-[OK]
+<Command>         ::=  <CommandType> ";"
 
-CREATE TABLE marks (name, mark, pass);
-[OK]
+<CommandType>     ::=  <Use> | <Create> | <Drop> | <Alter> | <Insert> | <Select> | <Update> | <Delete> | <Join>
 
-INSERT INTO marks VALUES ('Simon', 65, TRUE);
-[OK]
-INSERT INTO marks VALUES ('Sion', 55, TRUE);
-[OK]
-INSERT INTO marks VALUES ('Rob', 35, FALSE);
-[OK]
-INSERT INTO marks VALUES ('Chris', 20, FALSE);
-[OK]
+<Use>             ::=  "USE " [DatabaseName]
 
-SELECT * FROM marks;
-[OK]
-id	name	mark	pass
-1	Simon	65	TRUE
-2	Sion	55	TRUE
-3	Rob	35	FALSE
-4	Chris	20	FALSE
+<Create>          ::=  <CreateDatabase> | <CreateTable>
 
-SELECT * FROM marks WHERE name != 'Sion';
-[OK]
-id	name	mark	pass
-1	Simon	65	TRUE
-3	Rob	35	FALSE
-4	Chris	20	FALSE
+<CreateDatabase>  ::=  "CREATE " "DATABASE " [DatabaseName]
 
-SELECT * FROM marks WHERE pass == TRUE;
-[OK]
-id	name	mark	pass
-1	Simon	65	TRUE
-2	Sion	55	TRUE
+<CreateTable>     ::=  "CREATE " "TABLE " [TableName] | "CREATE " "TABLE " [TableName] "(" <AttributeList> ")"
 
-// Note: this is a comment for use in this transcript only (your server doesn’t need to be able parse them)
+<Drop>            ::=  "DROP " "DATABASE " [DatabaseName] | "DROP " "TABLE " [TableName]
 
-// Assuming there is a table called “coursework” in the database (and that table has been filled with data)
-SELECT * FROM coursework;
-[OK]
-id	task	submission
-1	OXO	3
-2	DB	1
-3	OXO	4
-4	STAG	2
+<Alter>           ::=  "ALTER " "TABLE " [TableName] " " <AlterationType> " " [AttributeName]
 
+<Insert>          ::=  "INSERT " "INTO " [TableName] " VALUES" "(" <ValueList> ")"
 
+<Select>          ::=  "SELECT " <WildAttribList> " FROM " [TableName] | "SELECT " <WildAttribList> " FROM " [TableName] " WHERE " <Condition> 
 
-// For JOINs: discard the ids from the original tables
-// discard the columns that the tables were matched on
-// create a new unique id for each of row of the table produced
-// attribute names are prepended with name of table from which they originated
+<Update>          ::=  "UPDATE " [TableName] " SET " <NameValueList> " WHERE " <Condition> 
 
-JOIN coursework AND marks ON submission AND id;
-[OK]
-id	coursework.task	marks.name	marks.mark	marks.pass
-1	OXO			Rob		35		FALSE
-2	DB			Simon		65		TRUE
-3	OXO			Chris		20		FALSE
-4	STAG			Sion		55		TRUE
+<Delete>          ::=  "DELETE " "FROM " [TableName] " WHERE " <Condition>
 
-UPDATE marks SET mark = 38 WHERE name == 'Chris';
-[OK]
+<Join>            ::=  "JOIN " [TableName] " AND " [TableName] " ON " [AttributeName] " AND " [AttributeName]
 
-SELECT * FROM marks WHERE name == 'Chris';
-[OK]
-id	name	mark	pass
-4	Chris	38	FALSE
+[Digit]           ::=  "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
-DELETE FROM marks WHERE name == 'Sion';
-[OK]
+[Uppercase]       ::=  "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
 
-SELECT * FROM marks;
-[OK]
-id	name	mark	pass
-1	Simon	65	TRUE
-3	Rob	35	FALSE
-4	Chris	38	FALSE
+[Lowercase]       ::=  "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
 
-SELECT * FROM marks WHERE (pass == FALSE) AND (mark > 35);
-[OK]
-id	name	mark	pass
-4	Chris	38	FALSE
+[Letter]          ::=  [Uppercase] | [Lowercase]
 
-SELECT * FROM marks WHERE name LIKE 'i';
-[OK]
-id	name	mark	pass
-1	Simon	65	TRUE
-4	Chris	38	FALSE
+[PlainText]       ::=  [Letter] | [Digit] | [PlainText] [Letter] | [PlainText] [Digit]
 
-SELECT id FROM marks WHERE pass == FALSE;
-[OK]
-id
-3
-4
+[Symbol]          ::=  "!" | "#" | "$" | "%" | "&" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | ":" | ";" | ">" | "=" | "<" | "?" | "@" | "[" | "\" | "]" | "^" | "_" | "`" | "{" | "}" | "~"
 
-SELECT name FROM marks WHERE mark>60;
-[OK]
-name
-Simon
+[Space]           ::=  " "
+
+<NameValueList>   ::=  <NameValuePair> | <NameValuePair> "," <NameValueList>
+
+<NameValuePair>   ::=  [AttributeName] "=" [Value]
+
+<AlterationType>  ::=  "ADD" | "DROP"
+
+<ValueList>       ::=  [Value] | [Value] "," <ValueList>
+
+[DigitSequence]   ::=  [Digit] | [Digit] [DigitSequence]
+
+[IntegerLiteral]  ::=  [DigitSequence] | "-" [DigitSequence] | "+" [DigitSequence] 
+
+[FloatLiteral]    ::=  [DigitSequence] "." [DigitSequence] | "-" [DigitSequence] "." [DigitSequence] | "+" [DigitSequence] "." [DigitSequence]
+
+[BooleanLiteral]  ::=  "TRUE" | "FALSE"
+
+[CharLiteral]     ::=  [Space] | [Letter] | [Symbol] | [Digit]
+
+[StringLiteral]   ::=  "" | [CharLiteral] | [StringLiteral] [CharLiteral]
+
+[Value]           ::=  "'" [StringLiteral] "'" | [BooleanLiteral] | [FloatLiteral] | [IntegerLiteral] | "NULL"
+
+[TableName]       ::=  [PlainText]
+
+[AttributeName]   ::=  [PlainText]
+
+[DatabaseName]    ::=  [PlainText]
+
+<WildAttribList>  ::=  <AttributeList> | "*"
+
+<AttributeList>   ::=  [AttributeName] | [AttributeName] "," <AttributeList>
+
+<Condition>       ::=  "(" <Condition> <BoolOperator> <Condition> ")" | <Condition> <BoolOperator> <Condition> | "(" [AttributeName] <Comparator> [Value] ")" | [AttributeName] <Comparator> [Value]
+
+<BoolOperator>    ::= "AND" | "OR"
+
+<Comparator>      ::=  "==" | ">" | "<" | ">=" | "<=" | "!=" | " LIKE "
 
 
-DELETE FROM marks WHERE mark<40;
-[OK]
-
-SELECT * FROM marks;
-[OK]
-id	name	mark	pass
-1	Simon	65	TRUE
-
-ALTER TABLE marks ADD age;
-[OK]
-
-SELECT * FROM marks;
-[OK]
-id	name	mark	pass	age
-1	Simon	65	TRUE	
-
-UPDATE marks SET age = 35 WHERE name == 'Simon';
-[OK]
-
-SELECT * FROM marks;
-[OK]
-id	name	mark	pass	age
-1	Simon	65	TRUE	35
-
-ALTER TABLE marks DROP pass;
-[OK]
-
-SELECT * FROM marks;
-[OK]
-id	name	mark	age
-1	Simon	65	35
-
-SELECT * FROM marks
-[ERROR]: Semi colon missing at end of line (or similar message !)
-
-// Assuming there is NOT a table called “crew” in the database
-SELECT * FROM crew;
-[ERROR]: Table does not exist (or similar message !)
-
-// Assuming there is NOT an attribute called “height” in the table
-SELECT height FROM marks WHERE name == 'Chris';
-[ERROR]: Attribute does not exist (or similar message !)
-
-DROP TABLE marks;
-[OK]
-
-DROP DATABASE markbook;
-[OK]
+Note:
+<name> denotes a rule which may contain arbitrary additional whitespace within the symbol, where as [name] indicates a rule that cannot contain additional whitespace.
+For rules where additional whitespace is permitted, this can only occur before/after/between tokens and NOT _inside_ the tokens themselves...
+For example, the following is valid: CREATE    DATABASE    marks;
+Whereas the following is not valid: CRE ATE   DATA BASE    marks;
