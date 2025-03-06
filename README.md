@@ -1,6 +1,6 @@
-##基于Java的MySql数据库实现##
+## 基于Java的MySql数据库实现
 
-支持这些语句：
+# 支持这些语句：
 
 CREATE DATABASE markbook;
 [OK]
@@ -156,7 +156,3 @@ DROP TABLE marks;
 
 DROP DATABASE markbook;
 [OK]
-
-
-Note that this transcript is not intended to be complete and comprehensive…
-The aim is to provide some illustrative examples of typical queries that you might expect to see. When writing your test cases, you should cover all eventualities – including both valid and invalid queries.
