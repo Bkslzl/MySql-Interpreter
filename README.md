@@ -2,7 +2,7 @@
 
 # 支持这些语句：
 
-
+`
 <Command>         ::=  <CommandType> ";"
 
 <CommandType>     ::=  <Use> | <Create> | <Drop> | <Alter> | <Insert> | <Select> | <Update> | <Delete> | <Join>
@@ -80,10 +80,4 @@
 <BoolOperator>    ::= "AND" | "OR"
 
 <Comparator>      ::=  "==" | ">" | "<" | ">=" | "<=" | "!=" | " LIKE "
-
-
-Note:
-<name> denotes a rule which may contain arbitrary additional whitespace within the symbol, where as [name] indicates a rule that cannot contain additional whitespace.
-For rules where additional whitespace is permitted, this can only occur before/after/between tokens and NOT _inside_ the tokens themselves...
-For example, the following is valid: CREATE    DATABASE    marks;
-Whereas the following is not valid: CRE ATE   DATA BASE    marks;
+`
