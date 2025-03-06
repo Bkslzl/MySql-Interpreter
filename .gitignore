@@ -1,0 +1,43 @@
+# 屏蔽 macOS 系统文件
+.DS_Store
+
+# 屏蔽 IDEA 项目文件
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# 屏蔽 Maven 或 Gradle 构建文件
+target/
+build/
+.gradle/
+.mvn/
+*.log
+
+# 屏蔽日志文件
+*.log
+*.log.*
+
+# 屏蔽本地配置文件（如 application.properties）
+*.properties
+*.yml
+*.yaml
+
+# 屏蔽依赖目录（如 node_modules）
+node_modules/
+
+# 屏蔽临时文件
+*.tmp
+*.bak
+*.swp
+
+# 屏蔽编译生成的类文件
+*.class
+
+# 屏蔽其他不需要的文件
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
