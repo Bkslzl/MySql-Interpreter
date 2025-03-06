@@ -2,7 +2,7 @@
 
 # 支持这些语句：
 
-`
+```
 <Command>         ::=  <CommandType> ";"
 
 <CommandType>     ::=  <Use> | <Create> | <Drop> | <Alter> | <Insert> | <Select> | <Update> | <Delete> | <Join>
@@ -80,4 +80,4 @@
 <BoolOperator>    ::= "AND" | "OR"
 
 <Comparator>      ::=  "==" | ">" | "<" | ">=" | "<=" | "!=" | " LIKE "
-`
+```
